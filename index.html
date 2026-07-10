@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Innovation Cold Cases | NHD 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,600;1,700;1,800&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#2E8B72;
+    --green-deep:#1E6B56;
+    --teal:#4FBFA6;
+    --yellow:#F9CE1D;
+    --gold:#E5A33B;
+    --ink:#16130E;
+    --paper:#FFF9E8;
+    --white:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation:none !important;transition:none !important;}
+  }
+  body{
+    font-family:'Archivo',sans-serif;
+    color:var(--ink);
+    background-color:var(--green);
+    background-image:
+      radial-gradient(circle at 3px 3px, rgba(255,255,255,.55) 2px, transparent 2.6px),
+      radial-gradient(circle at 14px 16px, rgba(249,206,29,.5) 2.4px, transparent 3px),
+      radial-gradient(circle at 26px 7px, rgba(30,107,86,.8) 2px, transparent 2.6px);
+    background-size:36px 36px, 44px 44px, 40px 40px;
+    line-height:1.55;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:28px 18px 90px;}
+
+  /* ---------- comic panel primitives ---------- */
+  .panel{
+    background:var(--paper);
+    border:4px solid var(--ink);
+    border-radius:18px;
+    box-shadow:8px 8px 0 var(--teal), 8px 8px 0 4px var(--ink);
+    padding:26px 26px 30px;
+    margin-bottom:34px;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--green-deep);
+    margin-bottom:6px;
+  }
+  h1,h2,h3{
+    font-family:'Barlow Condensed',sans-serif;
+    text-transform:uppercase;
+    font-style:italic;
+    line-height:1.02;
+    letter-spacing:.01em;
+  }
+  h2{font-size:2.1rem;font-weight:800;color:var(--ink);margin-bottom:10px;}
+  p.lede{font-size:1.02rem;max-width:64ch;}
+
+  /* ---------- header ---------- */
+  header{text-align:center;padding:10px 0 30px;}
+  .bubble{
+    display:inline-block;
+    background:var(--yellow);
+    border:5px solid var(--ink);
+    border-radius:32px;
+    box-shadow:10px 10px 0 var(--teal), 10px 10px 0 5px var(--ink);
+    padding:26px 40px 30px;
+    position:relative;
+    max-width:640px;
+  }
+  .bubble::after{ /* lightning-bolt tail */
+    content:"";
+    position:absolute;
+    left:34px;bottom:-42px;
+    width:0;height:0;
+    border-left:16px solid transparent;
+    border-right:34px solid transparent;
+    border-top:48px solid var(--ink);
+    transform:rotate(14deg);
+  }
+  .bubble::before{
+    content:"";
+    position:absolute;
+    left:41px;bottom:-30px;
+    width:0;height:0;
+    border-left:12px solid transparent;
+    border-right:26px solid transparent;
+    border-top:38px solid var(--yellow);
+    transform:rotate(14deg);
+    z-index:1;
+  }
+  .bubble .eyebrow{color:var(--ink);}
+  .bubble h1{
+    font-size:clamp(2.6rem,7vw,4.2rem);
+    font-weight:800;
+    color:var(--green-deep);
+    margin:2px 0 6px;
+  }
+  .bubble .tagline{
+    font-family:'Barlow Condensed',sans-serif;
+    font-style:italic;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    font-size:1.25rem;
+    color:var(--ink);
+  }
+  .theme-line{
+    margin-top:56px;
+    font-family:'Space Mono',monospace;
+    color:var(--white);
+    font-size:.78rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    text-shadow:2px 2px 0 var(--ink);
+  }
+
+  /* ---------- timer ---------- */
+  .timerbar{
+    position:sticky;top:10px;z-index:50;
+    display:flex;justify-content:center;
+    margin-bottom:30px;
+  }
+  .timer{
+    display:flex;align-items:center;gap:14px;
+    background:var(--ink);
+    border:4px solid var(--ink);
+    border-radius:999px;
+    box-shadow:5px 5px 0 var(--gold), 5px 5px 0 4px var(--ink);
+    padding:8px 12px 8px 22px;
+  }
+  .timer .clock{
+    font-family:'Space Mono',monospace;
+    font-size:1.5rem;font-weight:700;
+    color:var(--yellow);
+    min-width:118px;
+    letter-spacing:.05em;
+  }
+  .timer.warning .clock{color:#FF8A5C;}
+  .timer button{
+    font-family:'Barlow Condensed',sans-serif;
+    font-style:italic;font-weight:800;text-transform:uppercase;
+    font-size:1.05rem;letter-spacing:.05em;
+    background:var(--yellow);color:var(--ink);
+    border:3px solid var(--ink);border-radius:999px;
+    padding:6px 20px;cursor:pointer;
+  }
+  .timer button:hover{background:var(--teal);}
+  .timer button:focus-visible{outline:3px solid var(--white);outline-offset:2px;}
+
+  /* ---------- phase stepper ---------- */
+  .steps{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+    margin-bottom:34px;
+  }
+  .step{
+    background:var(--paper);
+    border:3px solid var(--ink);
+    border-radius:12px;
+    padding:10px 12px;
+    text-align:center;
+    box-shadow:4px 4px 0 var(--ink);
+    opacity:.55;
+  }
+  .step.active{background:var(--yellow);opacity:1;box-shadow:4px 4px 0 var(--teal),4px 4px 0 3px var(--ink);}
+  .step.done{background:var(--teal);opacity:1;}
+  .step .s-num{
+    font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;display:block;
+  }
+  .step .s-name{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.15rem;line-height:1.05;display:block;
+  }
+  .step .s-time{font-family:'Space Mono',monospace;font-size:.66rem;display:block;margin-top:2px;}
+
+  /* ---------- mission briefing ---------- */
+  .brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;}
+  .brief-card{
+    border:3px solid var(--ink);border-radius:12px;
+    background:var(--white);padding:14px 16px;
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  .brief-card b{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.15rem;display:block;color:var(--green-deep);
+  }
+  .brief-card span{font-size:.92rem;}
+
+  /* ---------- case cards ---------- */
+  .cases{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;}
+  .case-card{
+    text-align:left;
+    background:var(--white);
+    border:4px solid var(--ink);
+    border-radius:16px;
+    box-shadow:6px 6px 0 var(--ink);
+    padding:18px 18px 20px;
+    cursor:pointer;
+    font-family:'Archivo',sans-serif;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .case-card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--teal),8px 8px 0 4px var(--ink);}
+  .case-card:focus-visible{outline:4px solid var(--gold);outline-offset:3px;}
+  .case-card.selected{background:var(--yellow);box-shadow:8px 8px 0 var(--green),8px 8px 0 4px var(--ink);}
+  .case-card:last-child:nth-child(odd){grid-column:1 / -1;}
+  .case-card .file-no{
+    font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--green-deep);
+  }
+  .case-card h3{font-size:1.7rem;font-weight:800;color:var(--ink);margin:2px 0 6px;}
+  .case-card .hook{font-size:.9rem;color:var(--ink);}
+  .case-card .stamp{
+    display:inline-block;margin-top:10px;
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:.95rem;letter-spacing:.08em;
+    color:#B23A2A;border:3px solid #B23A2A;border-radius:6px;
+    padding:1px 10px;transform:rotate(-3deg);
+  }
+
+  /* ---------- dossier ---------- */
+  .dossier-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;margin-bottom:8px;}
+  .dossier-head h2{margin-bottom:0;}
+  .chip{
+    font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;
+    background:var(--ink);color:var(--yellow);
+    border-radius:999px;padding:3px 12px;
+  }
+  .facts{
+    background:var(--white);border:3px solid var(--ink);border-radius:12px;
+    box-shadow:4px 4px 0 var(--ink);
+    padding:16px 18px;margin:14px 0 18px;font-size:.95rem;
+  }
+  .facts b{color:var(--green-deep);}
+
+  .clue-label{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.35rem;margin:16px 0 8px;display:block;
+  }
+  .clues{display:grid;gap:10px;}
+  .clue{
+    border:3px solid var(--ink);border-radius:12px;overflow:hidden;
+    box-shadow:4px 4px 0 var(--ink);background:var(--white);
+  }
+  .clue > button{
+    width:100%;text-align:left;
+    display:flex;align-items:center;gap:12px;
+    background:var(--teal);border:none;cursor:pointer;
+    padding:11px 16px;
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.15rem;color:var(--ink);
+  }
+  .clue > button:hover{background:var(--yellow);}
+  .clue > button:focus-visible{outline:4px solid var(--gold);outline-offset:-4px;}
+  .clue > button .q{
+    font-family:'Space Mono',monospace;font-style:normal;font-size:.9rem;font-weight:700;
+    background:var(--ink);color:var(--yellow);
+    border-radius:50%;width:26px;height:26px;flex:0 0 26px;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .clue .body{display:none;padding:12px 16px 14px;font-size:.93rem;border-top:3px solid var(--ink);}
+  .clue.open .body{display:block;}
+  .clue.open > button{background:var(--yellow);}
+  .clue.open > button .q{background:var(--green-deep);color:var(--white);}
+
+  .links-label{margin-top:22px;}
+  .links{display:grid;gap:10px;}
+  .link-card{
+    display:block;text-decoration:none;color:var(--ink);
+    background:var(--white);border:3px solid var(--ink);border-radius:12px;
+    box-shadow:4px 4px 0 var(--ink);padding:12px 16px;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .link-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--gold),6px 6px 0 3px var(--ink);background:var(--paper);}
+  .link-card:focus-visible{outline:4px solid var(--gold);outline-offset:3px;}
+  .link-card .src{
+    font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--green-deep);display:block;
+  }
+  .link-card .ttl{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.25rem;line-height:1.1;display:block;
+  }
+  .link-card .why{font-size:.85rem;display:block;margin-top:2px;}
+  .link-card .arrow{float:right;font-weight:700;}
+
+  /* ---------- argument builder ---------- */
+  .arg-grid{display:grid;gap:16px;margin-top:16px;}
+  .arg{
+    background:var(--white);border:3px solid var(--ink);border-radius:12px;
+    box-shadow:4px 4px 0 var(--ink);padding:14px 16px 16px;
+  }
+  .arg label{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.3rem;display:block;color:var(--green-deep);
+  }
+  .arg .hint{font-size:.82rem;display:block;margin:2px 0 8px;color:#4b463c;}
+  .arg textarea{
+    width:100%;min-height:64px;resize:vertical;
+    font-family:'Archivo',sans-serif;font-size:.93rem;
+    border:3px solid var(--ink);border-radius:8px;
+    padding:9px 11px;background:var(--paper);
+  }
+  .arg textarea:focus-visible{outline:4px solid var(--gold);outline-offset:1px;}
+  .feedback{
+    display:block;margin-top:8px;
+    font-family:'Space Mono',monospace;font-size:.74rem;font-weight:700;
+    border:2px solid var(--ink);border-radius:8px;padding:6px 10px;
+    background:var(--paper);
+  }
+  .feedback.f0{background:#F6D6CF;color:#7c2114;border-color:#B23A2A;}
+  .feedback.f1{background:#FBEBC2;color:#6b4d05;border-color:var(--gold);}
+  .feedback.f2{background:#D6EFE8;color:#14493b;border-color:var(--teal);}
+  .feedback.f3{background:var(--teal);color:var(--ink);}
+  .meter-verdict{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.2rem;margin-top:8px;display:block;
+  }
+
+  .meter-wrap{margin-top:20px;}
+  .meter-label{
+    font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;display:flex;justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .meter{
+    height:26px;border:4px solid var(--ink);border-radius:999px;
+    background:var(--white);overflow:hidden;box-shadow:4px 4px 0 var(--ink);
+  }
+  .meter .fill{
+    height:100%;width:0%;
+    background:repeating-linear-gradient(45deg,var(--yellow) 0 14px,var(--gold) 14px 28px);
+    border-right:4px solid var(--ink);
+    transition:width .3s ease;
+  }
+  .meter .fill.full{background:repeating-linear-gradient(45deg,var(--teal) 0 14px,var(--green) 14px 28px);}
+
+  /* ---------- verdict ---------- */
+  .cta{
+    display:inline-block;margin-top:20px;
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.5rem;letter-spacing:.04em;
+    background:var(--yellow);color:var(--ink);
+    border:4px solid var(--ink);border-radius:14px;
+    box-shadow:6px 6px 0 var(--ink);
+    padding:10px 30px;cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .cta:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--teal),8px 8px 0 4px var(--ink);}
+  .cta:focus-visible{outline:4px solid var(--white);outline-offset:3px;}
+  .cta:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:6px 6px 0 var(--ink);}
+
+  .verdict-brief{
+    background:var(--white);border:3px solid var(--ink);border-radius:12px;
+    box-shadow:4px 4px 0 var(--ink);padding:18px 20px;margin-top:16px;
+    font-size:.95rem;
+  }
+  .verdict-brief h3{font-size:1.6rem;color:var(--green-deep);margin-bottom:8px;}
+  .verdict-brief .field{margin-bottom:10px;}
+  .verdict-brief .field b{
+    font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--green-deep);display:block;
+  }
+  .readystamp{
+    display:inline-block;margin-top:14px;
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.9rem;letter-spacing:.04em;
+    color:#B23A2A;border:5px solid #B23A2A;border-radius:10px;
+    padding:4px 22px;transform:rotate(-4deg);
+  }
+  .discuss{
+    margin-top:18px;background:var(--yellow);
+    border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);
+    padding:14px 16px;font-size:.93rem;
+  }
+  .discuss b{
+    font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:800;
+    text-transform:uppercase;font-size:1.2rem;display:block;
+  }
+
+  .hidden{display:none;}
+  footer{
+    text-align:center;font-family:'Space Mono',monospace;
+    color:var(--white);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+    text-shadow:1px 1px 0 var(--ink);margin-top:10px;
+  }
+
+  @media (max-width:680px){
+    .cases,.brief-grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:repeat(2,1fr);}
+    .panel{padding:20px 16px 24px;}
+    .bubble{padding:20px 22px 24px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="bubble">
+      <span class="eyebrow">National History Day 2027 &bull; Innovation in History</span>
+      <h1>The Innovation<br>Cold Cases</h1>
+      <div class="tagline">Impact &bull; Influence &bull; Change &mdash; A 15-minute investigation</div>
+    </div>
+    <div class="theme-line">Case status: unsolved &mdash; investigators wanted</div>
+  </header>
+
+  <div class="timerbar">
+    <div class="timer" id="timerBox">
+      <span class="clock" id="clock">15:00</span>
+      <button id="timerBtn" type="button">Start the clock</button>
+    </div>
+  </div>
+
+  <nav class="steps" aria-label="Activity phases">
+    <div class="step" id="step1"><span class="s-num">Phase 1</span><span class="s-name">Pick a case</span><span class="s-time">~2 min</span></div>
+    <div class="step" id="step2"><span class="s-num">Phase 2</span><span class="s-name">Investigate</span><span class="s-time">~6 min</span></div>
+    <div class="step" id="step3"><span class="s-num">Phase 3</span><span class="s-name">Build the case</span><span class="s-time">~5 min</span></div>
+    <div class="step" id="step4"><span class="s-num">Phase 4</span><span class="s-name">Verdict</span><span class="s-time">~2 min</span></div>
+  </nav>
+
+  <!-- ============ MISSION BRIEFING ============ -->
+  <section class="panel" id="briefing">
+    <span class="eyebrow">Mission briefing &bull; Read together</span>
+    <h2>Newer isn't always better.</h2>
+    <p class="lede">History is full of brilliant technologies that vanished &mdash; lost, abandoned, or replaced by
+    &ldquo;modern&rdquo; alternatives that were actually <em>worse</em> in important ways. Your team of investigators
+    will reopen one of these cold cases, figure out why the innovation disappeared, and argue whether the
+    world should bring it back.</p>
+    <div class="brief-grid">
+      <div class="brief-card"><b>Your team</b><span>Work in a group of 3&ndash;4. Pick a Lead Investigator (watches the clock), an Archivist (digs through the sources), and one or two Advocates (build the argument).</span></div>
+      <div class="brief-card"><b>Your job</b><span>Build a 60-second &ldquo;Case for Re-adoption&rdquo; pitch and deliver it to the class: how could your lost invention solve a problem we have <em>today</em>?</span></div>
+      <div class="brief-card"><b>The rules of evidence</b><span>Every claim in your pitch must come from the case file or its linked sources. No vibes &mdash; only evidence.</span></div>
+      <div class="brief-card"><b>The twist</b><span>Be honest about the catch. Every lost technology disappeared for a reason. A strong case names that reason &mdash; and answers it.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 1: PICK A CASE ============ -->
+  <section class="panel" id="phase1">
+    <span class="eyebrow">Phase 1 &bull; ~2 minutes</span>
+    <h2>Choose your cold case</h2>
+    <p class="lede">Five files sit on the desk &mdash; four ancient mysteries and one from living memory. Each is a
+    technology that worked &mdash; sometimes better than what we use today &mdash; and disappeared anyway. Tap a
+    file to open it.</p>
+    <div class="cases" id="caseGrid"></div>
+  </section>
+
+  <!-- ============ PHASE 2: DOSSIER ============ -->
+  <section class="panel hidden" id="phase2">
+    <span class="eyebrow">Phase 2 &bull; ~6 minutes</span>
+    <div class="dossier-head">
+      <h2 id="dName"></h2>
+      <span class="chip" id="dEra"></span>
+    </div>
+    <div class="facts" id="dFacts"></div>
+
+    <span class="clue-label">Crack the clues &mdash; why did it vanish?</span>
+    <div class="clues" id="dClues"></div>
+
+    <span class="clue-label links-label">Evidence locker &mdash; open the sources</span>
+    <div class="links" id="dLinks"></div>
+  </section>
+
+  <!-- ============ PHASE 3: BUILD THE CASE ============ -->
+  <section class="panel hidden" id="phase3">
+    <span class="eyebrow">Phase 3 &bull; ~5 minutes</span>
+    <h2>Build the case for re-adoption</h2>
+    <p class="lede">Draft your argument together. The Advocates type; everyone contributes. The judge below reads
+    every box and scores it &mdash; vague, off-topic, or unsupported answers will not pass. All four boxes must be
+    ruled at least <em>Admissible</em> (good enough for court) before your case can reach the jury.</p>
+    <div class="arg-grid">
+      <div class="arg">
+        <label for="a1">1. The modern problem</label>
+        <span class="hint">What problem today could this old innovation help solve? Be specific.</span>
+        <textarea id="a1" data-arg placeholder="e.g., Modern concrete cracks within decades and cement production is a major source of CO2..."></textarea>
+        <span class="feedback f0" id="fb-a1">Awaiting your argument.</span>
+      </div>
+      <div class="arg">
+        <label for="a2">2. The evidence</label>
+        <span class="hint">Name at least one fact from the dossier or a linked source that backs you up.</span>
+        <textarea id="a2" data-arg placeholder="e.g., According to MIT researchers, lime clasts let Roman concrete heal its own cracks..."></textarea>
+        <span class="feedback f0" id="fb-a2">Awaiting your argument.</span>
+      </div>
+      <div class="arg">
+        <label for="a3">3. The objection &mdash; answered</label>
+        <span class="hint">Why did it really disappear? Someone will bring it up. Beat them to it.</span>
+        <textarea id="a3" data-arg placeholder="e.g., Yes, it was slower to build with — but for bridges and sea walls meant to last a century, slower is worth it because..."></textarea>
+        <span class="feedback f0" id="fb-a3">Awaiting your argument.</span>
+      </div>
+      <div class="arg">
+        <label for="a4">4. The pitch line</label>
+        <span class="hint">One punchy sentence that opens your 60-second pitch.</span>
+        <textarea id="a4" data-arg placeholder="e.g., The Romans built a harbor that outlived their empire — our sea walls can't outlive a mortgage."></textarea>
+        <span class="feedback f0" id="fb-a4">Awaiting your argument.</span>
+      </div>
+    </div>
+    <div class="meter-wrap">
+      <div class="meter-label"><span>Argument strength</span><span id="meterPct">0%</span></div>
+      <div class="meter"><div class="fill" id="meterFill"></div></div>
+      <span class="meter-verdict" id="meterVerdict">The judge is waiting.</span>
+    </div>
+    <button class="cta" id="verdictBtn" type="button" disabled>Take it to the jury &rarr;</button>
+  </section>
+
+  <!-- ============ PHASE 4: VERDICT ============ -->
+  <section class="panel hidden" id="phase4">
+    <span class="eyebrow">Phase 4 &bull; ~2 minutes</span>
+    <h2>Case brief &mdash; ready to present</h2>
+    <p class="lede">Here's your compiled brief. The Lead Investigator reads the pitch line; the Advocates deliver the
+    rest. You have 60 seconds on the floor.</p>
+    <div class="verdict-brief" id="brief"></div>
+    <span class="readystamp">Ready to present!</span>
+    <div class="discuss">
+      <b>Jury deliberation &mdash; whole class</b>
+      After each pitch, vote: RE-ADOPT or KEEP IT COLD. Then discuss &mdash; if these technologies were so good,
+      what does their disappearance tell us about how innovation really works? Is &ldquo;progress&rdquo; a straight line?
+    </div>
+  </section>
+
+  <footer>Innovation in History: Impact &bull; Influence &bull; Change &mdash; NHD 2027</footer>
+</div>
+
+<script>
+/* =============== DATA =============== */
+const CASES = [
+  {
+    id:"concrete",
+    file:"Case File 001",
+    name:"Roman Self-Healing Concrete",
+    era:"c. 200 BCE – 476 CE",
+    hook:"The Pantheon's dome has stood for nearly 2,000 years without steel reinforcement. Your driveway cracked in ten.",
+    stamp:"Recipe lost",
+    facts:"<b>What it was:</b> Roman builders mixed their concrete while it was blazing hot, which left tiny white chunks of lime trapped inside. Here's the trick: when a crack formed and rainwater leaked in, those chunks dissolved and hardened again — sealing the crack like a scab. The concrete <b>healed itself</b>. That's why the Pantheon's dome and Roman harbors are still standing after almost 2,000 years, while modern concrete often cracks apart within 50. Bonus problem: making today's cement produces roughly 8% of the world's CO2.",
+    clues:[
+      {q:"The empire fell", a:"Roman concrete needed an empire behind it: quarries of volcanic ash, trained builders, and huge government projects. When Rome collapsed, the supply chains and the builders' knowledge collapsed with it. For centuries, the recipe was simply gone."},
+      {q:"The 'flaw' was the feature", a:"For decades, modern scientists looked at the white lime chunks and thought: sloppy mixing. Proof the Romans were primitive. Then in 2023, MIT researchers proved those 'mistakes' were the self-healing system. We dismissed the innovation because we assumed newer meant smarter."},
+      {q:"Fast and cheap won", a:"Modern cement sets fast, works anywhere, and is easy to mass-produce. Roman-style concrete cures slowly and needs special ingredients. In a world that rewards speed and low cost, nobody got paid for building things that last 2,000 years."}
+    ],
+    links:[
+      {src:"MIT News (2023)", ttl:"Riddle solved: why was Roman concrete so durable?", why:"The research breakthrough — lime clasts as self-healing reservoirs.", url:"https://news.mit.edu/2023/roman-concrete-durability-lime-casts-0106"},
+      {src:"Scientific American", ttl:"Ancient Roman concrete has self-healing capabilities", why:"Connects the discovery to modern emissions and infrastructure.", url:"https://www.scientificamerican.com/article/ancient-roman-concrete-has-self-healing-capabilities/"},
+      {src:"MIT News (2025)", ttl:"Pompeii offers insights into Roman building technology", why:"Newest evidence, straight from an excavation frozen in 79 CE.", url:"https://news.mit.edu/2025/pompeii-offers-insights-ancient-roman-building-technology-1209"}
+    ]
+  },
+  {
+    id:"antikythera",
+    file:"Case File 002",
+    name:"The Antikythera Mechanism",
+    era:"c. 100 BCE",
+    hook:"A hand-cranked bronze computer predicted eclipses 2,000 years ago. Then the technology vanished for more than 1,000 years.",
+    stamp:"Tech extinct",
+    facts:"<b>What it was:</b> In 1901, divers exploring an ancient shipwreck pulled up a corroded lump of bronze. Hidden inside: a shoebox-sized machine with at least 30 precision gears. Turn the crank, and it predicted eclipses, tracked the sun, moon, and planets — and even counted down to the next Olympic Games. It's the oldest known computer, built 2,000 years before laptops. Here's the mystery: nothing else this complicated shows up again in history for about <b>1,400 years</b>. The technology didn't just fade — it went extinct.",
+    clues:[
+      {q:"One-of-a-kind knowledge", a:"The mechanism probably came from a single workshop, maybe on the island of Rhodes. When only a few people on Earth know how to build something, that knowledge is fragile. One war, one shipwreck, one generation without an apprentice — and the whole skill disappears."},
+      {q:"No customers, no future", a:"This was likely a luxury toy for the rich, not a tool ordinary people needed. Without customers, there was no reason for workshops to stay open or train new builders. Think about it: how many technologies today survive only because someone's buying?"},
+      {q:"No backup copy", a:"Ancient knowledge lived in craftsmen's hands and a few fragile scrolls. There was no cloud, no file, no saved copy. The Antikythera mechanism proves civilizations can lose entire branches of technology — and that what survives from the past may not be the best of what existed."}
+    ],
+    links:[
+      {src:"Britannica", ttl:"Antikythera mechanism: description & facts", why:"The reliable overview — what it did, dial by dial.", url:"https://www.britannica.com/topic/Antikythera-mechanism"},
+      {src:"Smithsonian Magazine", ttl:"Decoding the Antikythera mechanism, the first computer", why:"The detective story of how researchers cracked it.", url:"https://www.smithsonianmag.com/history/decoding-antikythera-mechanism-first-computer-180953979/"},
+      {src:"World History Encyclopedia", ttl:"The Antikythera Mechanism", why:"Context on the shipwreck, the discovery, and the UCL reconstruction.", url:"https://www.worldhistory.org/Antikythera_Mechanism/"}
+    ]
+  },
+  {
+    id:"damascus",
+    file:"Case File 003",
+    name:"Damascus Steel",
+    era:"c. 900 – 1750 CE",
+    hook:"Legend says these swords could slice a silk scarf floating in mid-air. Inside the metal? Nanotechnology — 400 years before scientists had a word for it.",
+    stamp:"Secret lost",
+    facts:"<b>What it was:</b> Damascus swords were famous across the world for doing the impossible: they were super sharp AND super flexible. Most hard steel is brittle — hit it and it shatters. Damascus blades bent and kept cutting, with a beautiful wavy pattern flowing down the blade like water. They were forged from a special steel called wootz, shipped in small cakes from India. In 2006, scientists put a 400-year-old blade under an electron microscope and found <b>carbon nanotubes</b> inside — tiny structures modern labs only figured out how to make recently. Then, around 1750, the knowledge died out. Nobody on Earth could make true Damascus steel anymore. The \"Damascus\" knives sold today copy the look — not the original steel.",
+    clues:[
+      {q:"The mines ran out", a:"The magic wasn't just skill — it was the ore. The iron from certain Indian mines contained tiny traces of other metals (like vanadium) that made the nanostructures form. When those mines were used up, blacksmiths switched to new ore, and the recipe just... stopped working. No one understood why."},
+      {q:"The secret was TOO secret", a:"Blacksmiths guarded their methods like treasure. Techniques were passed from master to apprentice, father to son — never written down. Secrecy protected their business, but it also meant one broken chain of teaching could erase the technology forever. And it did."},
+      {q:"They knew HOW, not WHY", a:"The smiths knew the steps by heart, but not the science underneath. So when one hidden ingredient changed, they couldn't troubleshoot the problem — they didn't know the nanostructures existed. Knowledge built on trial-and-error, without understanding, is fragile. What 'recipes' do we follow today without knowing why they work?"}
+    ],
+    links:[
+      {src:"National Geographic", ttl:"Carbon nanotechnology in a 17th-century Damascus sword", why:"The full story: how ancient smiths made nanotubes without knowing it.", url:"https://www.nationalgeographic.com/science/article/carbon-nanotechnology-in-an-17th-century-damascus-sword"},
+      {src:"Nature News", ttl:"Sharpest cut from nanotube sword", why:"The 2006 discovery — and a scientist who disagrees. Who's right?", url:"https://www.nature.com/news/2006/061113/full/news061113-11.html"},
+      {src:"Chemistry World", ttl:"Carbon nanotubes: Saladin's secret weapon", why:"The chemistry of why these blades did the impossible.", url:"https://www.chemistryworld.com/news/carbon-nanotubes-saladins-secret-weapon/3000746.article"}
+    ]
+  },
+  {
+    id:"bridge",
+    file:"Case File 004",
+    name:"Inca Grass Suspension Bridges",
+    era:"c. 1400 CE – today (one survives)",
+    hook:"The Inca spanned canyons with woven grass — earthquake-flexible bridges rebuilt by whole communities in three days. Exactly one is left.",
+    stamp:"Last of its kind",
+    facts:"<b>What it was:</b> The Inca built nearly 25,000 miles of roads through the Andes mountains — and crossed deep canyons on suspension bridges woven entirely out of <b>grass</b>. It sounds impossible, but braided grass cables are seriously strong, and a flexible bridge survives earthquakes better than a stiff one. Materials cost almost nothing, and a whole community could rebuild a bridge in three days. Over 200 of these bridges once existed. Today, exactly one survives: the Q'eswachaka bridge in Peru, rebuilt every June by four Quechua communities — a tradition recognized by UNESCO.",
+    clues:[
+      {q:"Conquest cut the cords", a:"Spanish colonizers destroyed the Inca government that organized bridge-building as shared community work. And here's the catch: the bridges were made of grass. Skip the yearly rebuild for two years, and the bridge rots away. The technology lived in the tradition — not the object."},
+      {q:"Steel became the symbol", a:"Metal bridges looked 'modern' and 'permanent.' A grass bridge — no matter how well-engineered — looked old-fashioned to the governments that came later. They even built a steel bridge right next to Q'eswachaka. The communities kept rebuilding the grass one anyway."},
+      {q:"The knowledge IS the technology", a:"There are no blueprints. The engineering lives in the hands of master builders like Victoriano Arizapana, taught by doing, in the Quechua language. As fewer people speak Quechua, the technology fades with it. Innovations can go extinct — just like species."}
+    ],
+    links:[
+      {src:"UNESCO Intangible Heritage", ttl:"Rituals of the annual renewal of the Q'eswachaka bridge", why:"The official recognition — and how the rebuild works.", url:"https://ich.unesco.org/en/RL/knowledge-skills-and-rituals-related-to-the-annual-renewal-of-the-qeswachaka-bridge-00594"},
+      {src:"Smithsonian / NMAI", ttl:"Q'eswachaka, the last Inka suspension bridge", why:"Photos and the engineering of grass-rope cables.", url:"https://www.smithsonianmag.com/blogs/national-museum-american-indian/2017/08/05/qeswachaka-last-inka-suspension-bridge/"},
+      {src:"National Geographic", ttl:"Photos of the last Incan suspension bridge in Peru", why:"The communities keeping a 600-year-old technology alive.", url:"https://www.nationalgeographic.com/travel/article/inca-grass-rope-bridge-qeswachaka-unesco"}
+    ]
+  },
+  {
+    id:"starlite",
+    file:"Case File 005",
+    name:"Starlite",
+    era:"1986 – 2011",
+    hook:"A hairdresser invented a plastic that let a raw egg survive a blowtorch on live TV. NASA came calling. He never told anyone the recipe — and died with it.",
+    stamp:"Formula missing",
+    facts:"<b>What it was:</b> In 1990, British TV viewers watched a raw egg get blasted by a blowtorch for four minutes. When the flame stopped, the egg was still raw and barely warm — because it was coated in a mystery material called Starlite. The inventor? Maurice Ward, a hairdresser from Hartlepool, England, with <b>no chemistry degree</b>, who mixed it in a kitchen blender. He started experimenting after a 1985 runway fire killed 55 people — most from toxic smoke, not flames. Defense scientists tested Starlite and were stunned; NASA wanted meetings. But Ward was terrified companies would steal his invention. He never patented it, never sold it, and shared the full recipe with no one. He died in 2011 — and the formula may have died with him.",
+    clues:[
+      {q:"He trusted no one", a:"Ward wouldn't even let labs keep samples, afraid they'd reverse-engineer the recipe. He demanded to keep control in every deal, believing Starlite was worth billions. Talks with NASA and major companies all fell apart. A technology that lives in one person's head can disappear in a single lifetime — and it did."},
+      {q:"No patent = no paper trail", a:"A patent protects an inventor, but there's a price: you must publish how your invention works. Ward refused and chose total secrecy instead. Sound familiar? The Damascus steel blacksmiths made the exact same choice — 250 years earlier. Different century, same mistake."},
+      {q:"Was it even real?", a:"Here's your twist, investigators: the TV demo was real, and respected defense scientists said the material worked. But the wildest claims — like surviving 10,000°C — were never independently confirmed. Since then, students and YouTubers have cooked up look-alikes using flour, baking soda, and glue. So how strong is the evidence, really? Weigh it before you argue."}
+    ],
+    links:[
+      {src:"BBC Science Focus", ttl:"Whatever happened to Starlite?", why:"The short version of the whole strange story.", url:"https://www.sciencefocus.com/science/whatever-happened-to-starlite"},
+      {src:"Institute of Physics", ttl:"The enigma of Starlite", why:"How the egg demo worked — and the physics behind heat-blocking materials.", url:"https://spark.iop.org/enigma-starlite"},
+      {src:"KVPR (NPR)", ttl:"Miracle or hoax? Students attempt to recreate Starlite", why:"College students + NASA's Jet Propulsion Lab try to crack the formula today.", url:"https://www.kvpr.org/science/2019-05-22/miracle-or-hoax-uc-merced-students-attempt-to-recreate-remarkable-mysterious-starlite-material"}
+    ]
+  }
+];
+
+/* =============== STATE =============== */
+let selectedCase = null;
+let secondsLeft = 15 * 60;
+let ticking = false;
+let tickHandle = null;
+
+/* =============== TIMER =============== */
+const clockEl = document.getElementById("clock");
+const timerBtn = document.getElementById("timerBtn");
+const timerBox = document.getElementById("timerBox");
+
+function renderClock(){
+  const m = Math.floor(Math.max(secondsLeft,0)/60);
+  const s = Math.max(secondsLeft,0)%60;
+  clockEl.textContent = String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+  timerBox.classList.toggle("warning", secondsLeft <= 120);
+}
+function tick(){
+  secondsLeft--;
+  renderClock();
+  if(secondsLeft <= 0){
+    clearInterval(tickHandle);
+    ticking = false;
+    timerBtn.textContent = "Time's up!";
+    timerBtn.disabled = true;
+  }
+}
+timerBtn.addEventListener("click", () => {
+  if(ticking){
+    clearInterval(tickHandle);
+    ticking = false;
+    timerBtn.textContent = "Resume";
+  } else {
+    tickHandle = setInterval(tick, 1000);
+    ticking = true;
+    timerBtn.textContent = "Pause";
+  }
+});
+renderClock();
+
+/* =============== STEPPER =============== */
+function setPhase(n){
+  for(let i=1;i<=4;i++){
+    const el = document.getElementById("step"+i);
+    el.classList.toggle("active", i===n);
+    el.classList.toggle("done", i<n);
+  }
+}
+setPhase(1);
+
+/* =============== PHASE 1: CASE CARDS =============== */
+const caseGrid = document.getElementById("caseGrid");
+CASES.forEach(c => {
+  const btn = document.createElement("button");
+  btn.className = "case-card";
+  btn.type = "button";
+  btn.innerHTML = `
+    <span class="file-no">${c.file}</span>
+    <h3>${c.name}</h3>
+    <span class="hook">${c.hook}</span><br>
+    <span class="stamp">${c.stamp}</span>`;
+  btn.addEventListener("click", () => selectCase(c, btn));
+  caseGrid.appendChild(btn);
+});
+
+function selectCase(c, btn){
+  selectedCase = c;
+  document.querySelectorAll(".case-card").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
+  buildDossier(c);
+  document.getElementById("phase2").classList.remove("hidden");
+  document.getElementById("phase3").classList.remove("hidden");
+  document.getElementById("phase4").classList.add("hidden");
+  setPhase(2);
+  judgeAll(); // topical relevance depends on which case is open
+  document.getElementById("phase2").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+/* =============== PHASE 2: DOSSIER =============== */
+function buildDossier(c){
+  document.getElementById("dName").textContent = c.name;
+  document.getElementById("dEra").textContent = c.era;
+  document.getElementById("dFacts").innerHTML = c.facts;
+
+  const cluesEl = document.getElementById("dClues");
+  cluesEl.innerHTML = "";
+  c.clues.forEach((clue, i) => {
+    const div = document.createElement("div");
+    div.className = "clue";
+    div.innerHTML = `
+      <button type="button" aria-expanded="false"><span class="q">?</span><span>Clue ${i+1}: ${clue.q}</span></button>
+      <div class="body">${clue.a}</div>`;
+    div.querySelector("button").addEventListener("click", () => {
+      const open = div.classList.toggle("open");
+      div.querySelector("button").setAttribute("aria-expanded", open ? "true" : "false");
+      div.querySelector("button .q").textContent = open ? "!" : "?";
+      maybeAdvanceToBuild(c, cluesEl);
+    });
+    cluesEl.appendChild(div);
+  });
+
+  const linksEl = document.getElementById("dLinks");
+  linksEl.innerHTML = "";
+  c.links.forEach(l => {
+    const a = document.createElement("a");
+    a.className = "link-card";
+    a.href = l.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.innerHTML = `<span class="arrow">&nearr;</span><span class="src">${l.src}</span><span class="ttl">${l.ttl}</span><span class="why">${l.why}</span>`;
+    linksEl.appendChild(a);
+  });
+}
+
+function maybeAdvanceToBuild(c, cluesEl){
+  const opened = cluesEl.querySelectorAll(".clue.open").length;
+  if(opened >= c.clues.length){ setPhase(3); }
+}
+
+/* =============== PHASE 3: THE JUDGE =============== */
+/* Rubric: each field scored 0-3.
+   0 = struck (empty / gibberish / spam)   1 = weak (thin or generic)
+   2 = admissible (substantive + on-topic) 3 = airtight (specific + meets the field's own bar)
+   Verdict unlocks only when every field scores >= 2. */
+
+const BANKS = {
+  concrete:["concrete","roman","romans","rome","lime","clast","clasts","quicklime","ash","volcanic","pantheon","cement","portland","crack","cracks","cracking","heal","heals","healing","self-healing","co2","carbon","emission","emissions","dome","durable","durability","mit","seawater","harbor","harbors","aqueduct","aqueducts","infrastructure","masic","pompeii","vitruvius"],
+  antikythera:["antikythera","gear","gears","bronze","greek","greece","astronomy","astronomical","eclipse","eclipses","computer","analog","mechanism","shipwreck","rhodes","clock","clocks","calendar","olympic","olympics","planet","planets","moon","sun","workshop","apprentice","apprentices","artisan","artisans","knowledge","freeth","dial","dials","crank"],
+  damascus:["sword","swords","blade","blades","steel","damascus","wootz","india","indian","ore","ores","carbon","nanotube","nanotubes","nanowire","nanowires","nanotechnology","nano","pattern","patterns","wavy","forge","forged","forging","blacksmith","blacksmiths","smith","smiths","sharp","sharpness","flexible","brittle","recipe","secret","secrets","crucible","ingot","ingots","metal","metals","metallurgy","dresden","vanadium","impurities","impurity","syria","sabre","saber","knife","knives","apprentice","apprentices","microscope"],
+  bridge:["bridge","bridges","inca","inka","incan","grass","rope","ropes","woven","weave","weaving","suspension","andes","andean","peru","peruvian","quechua","qeswachaka","q'eswachaka","earthquake","earthquakes","flexible","flexibility","steel","community","communities","rebuild","rebuilt","renewal","ichu","q'oya","qoya","apurimac","canyon","gorge","materials","tradition","apprenticeship","arizapana","mit'a","minka"],
+  starlite:["starlite","ward","maurice","hairdresser","plastic","heat","heatproof","heat-proof","fireproof","fire-proof","fire","flame","flames","flameproof","blowtorch","torch","egg","coating","coat","paint","spray","formula","recipe","secret","secrets","secrecy","patent","patents","patented","nasa","boeing","nuclear","shield","shields","shielding","insulation","insulate","insulating","wildfire","wildfires","smoke","toxic","fumes","polymer","polymers","material","materials","hartlepool","manchester","thermashield","reverse-engineer","reverse","engineering","kitchen","blender","ingredients","spacecraft","rocket","rockets","heatshield","aerospace","inventor","invention"]
+};
+const EVIDENCE_MARKERS = ["according","mit","unesco","smithsonian","researcher","researchers","research","scientist","scientists","study","studies","yale","britannica","geographic","source","sources","article","found","discovered","confirmed","professor","university","dossier","report","reported"];
+const CONCESSION_MARKERS = ["but","however","although","though","while","yes","admit","admittedly","true","critics","granted","despite","even","slower","harder","costly","expensive","still","worth","trade-off","tradeoff","trade","downside","weakness","yet","sure"];
+const VAGUE_WORDS = ["stuff","things","thing","cool","nice","really","very","awesome","good","great","best","amazing","interesting","like","totally","basically","whatever","kinda","sorta","pretty"];
+const PROBLEM_MARKERS = ["problem","problems","today","modern","now","current","currently","crisis","climate","co2","carbon","emission","emissions","cost","costs","costly","expensive","repair","repairs","fail","fails","failing","failure","crack","cracks","drought","droughts","shortage","scarcity","waste","collapse","collapsing","aging","crumbling","infrastructure","energy","pollution","disaster","disasters","earthquake","earthquakes","water","fragile","unsustainable","broken","wildfire","wildfires","fire","fires","burn","burns","burning","burned","deaths","die","dying","killed","kills","danger","dangerous","safety","unsafe","emergency","homes","damage","damaged","destruction","destroy","destroys","destroyed","risk","risks","threat"];
+
+const tokenize = t => t.toLowerCase().replace(/[^a-z0-9'’\- ]+/g," ").split(/\s+/).filter(Boolean);
+const hits = (tokens, bank) => tokens.filter(w => bank.includes(w.replace(/’/g,"'"))).length;
+
+/* Gibberish / spam detection */
+function isGarbage(text, tokens){
+  if(tokens.length === 0) return true;
+  // real-looking words: contain a vowel, sane length, no 4+ repeated chars
+  const realish = tokens.filter(w =>
+    /[aeiouy]/.test(w) && w.length <= 18 && !/(.)\1{3,}/.test(w) &&
+    !/[bcdfghjklmnpqrstvwxz]{5,}/.test(w) && /^[a-z'’\-]+$/.test(w.replace(/[0-9]/g,"a"))
+  ).length;
+  if(realish / tokens.length < 0.65) return true;
+  // repetition spam: "good good good good good"
+  if(tokens.length >= 8 && new Set(tokens).size / tokens.length < 0.45) return true;
+  return false;
+}
+
+function scoreField(id, text){
+  const t = text.trim();
+  const tokens = tokenize(t);
+  const bank = selectedCase ? BANKS[selectedCase.id] : [];
+  const topical = hits(tokens, bank);
+  const hasNumber = /\d/.test(t);
+
+  if(t.length === 0) return {s:0, msg:"Awaiting your argument."};
+  if(isGarbage(t, tokens)) return {s:0, msg:"STRUCK FROM THE RECORD. This isn't an argument — it's noise. Write real sentences."};
+
+  const minWords = id === "a4" ? 6 : 12;
+  if(tokens.length < minWords) return {s:1, msg:"Too thin to survive cross-examination. " + (id==="a4" ? "Give the line some weight." : "Aim for 2–3 full sentences.")};
+
+  if(topical === 0) return {s:1, msg:"Generic — this could be about any technology. Name YOUR innovation and its specifics from the dossier."};
+
+  const vague = hits(tokens, VAGUE_WORDS);
+  if(vague >= 3 && vague >= topical && !hasNumber) return {s:1, msg:"NOT ADMISSIBLE — too much filler (\"cool,\" \"stuff,\" \"nice\"). The jury wants specifics, not vibes."};
+
+  if(id === "a3" && /there (is|are) no|no (real )?(downside|weakness|flaw|catch|problem)|nothing wrong|perfect|flawless|best ever|every (possible|single) way/.test(t.toLowerCase())){
+    return {s:1, msg:"OVERRULED — claiming it has no weaknesses is denial, not a rebuttal. Every lost technology has a catch. Name yours, then answer it."};
+  }
+
+  // Field-specific bar for full marks
+  if(id === "a1"){
+    const prob = hits(tokens, PROBLEM_MARKERS);
+    if(prob === 0) return {s:1, msg:"NOT ADMISSIBLE yet — you haven't named a modern problem. Point at something broken TODAY that this could fix."};
+    return (topical >= 2 || hasNumber)
+      ? {s:3, msg:"AIRTIGHT. A real problem, tied to your case."}
+      : {s:2, msg:"Admissible. Add a specific detail — a number, a place, a named material — to make it airtight."};
+  }
+  if(id === "a2"){
+    const ev = hits(tokens, EVIDENCE_MARKERS);
+    if(ev === 0 && !hasNumber) return {s:1, msg:"NOT ADMISSIBLE — unsupported claim. \"Trust me\" isn't evidence. Name your source (MIT? UNESCO? The dossier?) or cite a specific fact."};
+    return (topical >= 2)
+      ? {s:3, msg:"AIRTIGHT. Sourced and specific — the jury believes you."}
+      : {s:2, msg:"Admissible. Tie the evidence more tightly to your case's own details."};
+  }
+  if(id === "a3"){
+    const con = hits(tokens, CONCESSION_MARKERS);
+    if(con === 0) return {s:1, msg:"NOT ADMISSIBLE — you dodged the objection. Concede the real reason it disappeared, THEN answer it. (\"Yes, it was slower, but...\")"};
+    return (topical >= 2)
+      ? {s:3, msg:"AIRTIGHT. You faced the weakness head-on. That's how cases are won."}
+      : {s:2, msg:"Admissible. Ground your rebuttal in your case's specifics to make it airtight."};
+  }
+  // a4: the pitch line
+  if(tokens.length > 30) return {s:2, msg:"That's a paragraph, not a pitch line. Cut it to one punchy sentence."};
+  return (topical >= 1 && tokens.length <= 25)
+    ? {s:3, msg:"AIRTIGHT. Short, sharp, on the case. Open with it."}
+    : {s:2, msg:"Admissible. Tighten it until it stings."};
+}
+
+const argFields = () => Array.from(document.querySelectorAll("textarea[data-arg]"));
+const meterFill = document.getElementById("meterFill");
+const meterPct = document.getElementById("meterPct");
+const meterVerdict = document.getElementById("meterVerdict");
+const verdictBtn = document.getElementById("verdictBtn");
+let lastScores = {a1:0,a2:0,a3:0,a4:0};
+
+function judgeAll(){
+  let total = 0, allAdmissible = true;
+  argFields().forEach(t => {
+    const {s, msg} = scoreField(t.id, t.value);
+    lastScores[t.id] = s;
+    total += s;
+    if(s < 2) allAdmissible = false;
+    const fb = document.getElementById("fb-" + t.id);
+    fb.textContent = msg;
+    fb.className = "feedback f" + s;
+  });
+  const pct = Math.round(total / 12 * 100);
+  meterFill.style.width = pct + "%";
+  meterFill.classList.toggle("full", allAdmissible);
+  meterPct.textContent = pct + "%";
+  meterVerdict.textContent =
+    pct === 0  ? "The judge is waiting." :
+    pct < 35   ? "Ruling: thrown out of court." :
+    pct < 60   ? "Ruling: shaky — the jury isn't buying it yet." :
+    !allAdmissible ? "Ruling: close — one of your boxes is still weak. Check the red and gold notes." :
+    pct < 90   ? "Ruling: admissible. The jury will hear it." :
+                 "Ruling: airtight. Counsel, proceed.";
+  verdictBtn.disabled = !allAdmissible;
+}
+
+document.addEventListener("input", e => {
+  if(!e.target.matches("textarea[data-arg]")) return;
+  judgeAll();
+});
+
+/* =============== PHASE 4: VERDICT =============== */
+verdictBtn.addEventListener("click", () => {
+  const [a1,a2,a3,a4] = argFields().map(t => t.value.trim());
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  document.getElementById("brief").innerHTML = `
+    <h3>The People v. "Newer Is Always Better"<br>Re: ${selectedCase ? selectedCase.name : "Your case"}</h3>
+    <div class="field"><b>Opening pitch line</b>${esc(a4)}</div>
+    <div class="field"><b>The modern problem</b>${esc(a1)}</div>
+    <div class="field"><b>The evidence</b>${esc(a2)}</div>
+    <div class="field"><b>The objection, answered</b>${esc(a3)}</div>
+    <div class="field"><b>Judge's ruling</b>${lastScores.a1+lastScores.a2+lastScores.a3+lastScores.a4} / 12 — ${(lastScores.a1+lastScores.a2+lastScores.a3+lastScores.a4) >= 11 ? "Airtight case." : "Admissible. Sharpen it live if you can."}</div>`;
+  document.getElementById("phase4").classList.remove("hidden");
+  setPhase(4);
+  document.getElementById("phase4").scrollIntoView({behavior:"smooth", block:"start"});
+});
+</script>
+</body>
+</html>
