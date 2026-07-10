@@ -450,7 +450,7 @@
   <section class="panel" id="phase1">
     <span class="eyebrow">Phase 1 &bull; ~2 minutes</span>
     <h2>Choose your cold case</h2>
-    <p class="lede">Five files sit on the desk &mdash; four ancient mysteries and one from living memory. Each is a
+    <p class="lede">Six files sit on the desk &mdash; four ancient mysteries and two from living memory. Each is a
     technology that worked &mdash; sometimes better than what we use today &mdash; and disappeared anyway. Tap a
     file to open it.</p>
     <div class="cases" id="caseGrid"></div>
@@ -628,6 +628,25 @@ const CASES = [
       {src:"Institute of Physics", ttl:"The enigma of Starlite", why:"How the egg demo worked — and the physics behind heat-blocking materials.", url:"https://spark.iop.org/enigma-starlite"},
       {src:"KVPR (NPR)", ttl:"Miracle or hoax? Students attempt to recreate Starlite", why:"College students + NASA's Jet Propulsion Lab try to crack the formula today.", url:"https://www.kvpr.org/science/2019-05-22/miracle-or-hoax-uc-merced-students-attempt-to-recreate-remarkable-mysterious-starlite-material"}
     ]
+  },
+  {
+    id:"concorde",
+    file:"Case File 006",
+    name:"Concorde: Supersonic Travel",
+    era:"1976 – 2003",
+    hook:"In 1976, passengers flew New York to London in about three hours — at twice the speed of sound. Today's planes are slower than your grandparents'. One month ago, NASA reopened the case.",
+    stamp:"Grounded",
+    facts:"<b>What it was:</b> Concorde was the fastest passenger plane ever built: 1,350 mph — twice the speed of sound — cruising at 60,000 feet, high enough to see the curve of the Earth. It crossed the Atlantic in roughly three hours while regular jets took seven or eight. For 27 years it actually flew paying passengers. Then, in October 2003, it was retired — and nothing replaced it. Think about what that means: air travel is the rare technology where we went <b>backward</b>. A flight to London takes longer today than it did in 1976. One of the retired Concordes now hangs in the Smithsonian's National Air and Space Museum — a piece of the future, parked in a museum of the past. But this cold case just cracked open: on June 5, 2026, NASA's experimental X-59 jet went supersonic for the first time, testing technology designed to fix the exact problem that grounded Concorde.",
+    clues:[
+      {q:"The boom grounded it", a:"Every time Concorde broke the sound barrier, it dropped a sonic boom — a shockwave loud enough to rattle windows for miles. The U.S. and other countries banned supersonic flight over land, so Concorde could only fly ocean routes. Lesson: a technology can work perfectly in the sky and still be killed on the ground — by the people living under it."},
+      {q:"Fast for the few", a:"Concorde burned enormous amounts of fuel and carried only about 100 passengers, so tickets cost thousands of dollars — it was a ride for celebrities and CEOs, not families. After its only fatal crash in 2000 and the drop in air travel after 9/11, the money stopped making sense. The manufacturer quit making spare parts, and that was that. Brilliance isn't enough; an innovation needs a way to pay for itself."},
+      {q:"The case just reopened", a:"This is a live investigation. NASA's X-59 is shaped like a 100-foot dart specifically so its shockwaves reach the ground as a soft 'thump' — about as loud as a car door closing — instead of a boom. It went supersonic for the first time on June 5, 2026. If community noise tests succeed, regulators may rewrite the rules that grounded Concorde. Your 'Case for Re-adoption' isn't hypothetical — NASA is arguing it right now."}
+    ],
+    links:[
+      {src:"Smithsonian Air & Space Museum", ttl:"Concorde Fox Alpha, Air France", why:"The museum's own file on its retired Concorde — the full rise-and-fall story.", url:"https://airandspace.si.edu/collection-objects/concorde-fox-alpha-air-france/nasm_A20030139000"},
+      {src:"Scientific American (June 2026)", ttl:"NASA's X-59 plane goes supersonic for the first time", why:"Breaking news, one month old: the re-adoption case in action.", url:"https://www.scientificamerican.com/article/nasas-x-59-plane-goes-supersonic-for-the-first-time/"},
+      {src:"The Conversation", ttl:"Is supersonic air travel about to return?", why:"Aviation researchers weigh whether the comeback can actually work.", url:"https://theconversation.com/is-supersonic-air-travel-about-to-return-two-decades-after-the-last-concorde-flight-269990"}
+    ]
   }
 ];
 
@@ -761,7 +780,8 @@ const BANKS = {
   antikythera:["antikythera","gear","gears","bronze","greek","greece","astronomy","astronomical","eclipse","eclipses","computer","analog","mechanism","shipwreck","rhodes","clock","clocks","calendar","olympic","olympics","planet","planets","moon","sun","workshop","apprentice","apprentices","artisan","artisans","knowledge","freeth","dial","dials","crank"],
   damascus:["sword","swords","blade","blades","steel","damascus","wootz","india","indian","ore","ores","carbon","nanotube","nanotubes","nanowire","nanowires","nanotechnology","nano","pattern","patterns","wavy","forge","forged","forging","blacksmith","blacksmiths","smith","smiths","sharp","sharpness","flexible","brittle","recipe","secret","secrets","crucible","ingot","ingots","metal","metals","metallurgy","dresden","vanadium","impurities","impurity","syria","sabre","saber","knife","knives","apprentice","apprentices","microscope"],
   bridge:["bridge","bridges","inca","inka","incan","grass","rope","ropes","woven","weave","weaving","suspension","andes","andean","peru","peruvian","quechua","qeswachaka","q'eswachaka","earthquake","earthquakes","flexible","flexibility","steel","community","communities","rebuild","rebuilt","renewal","ichu","q'oya","qoya","apurimac","canyon","gorge","materials","tradition","apprenticeship","arizapana","mit'a","minka"],
-  starlite:["starlite","ward","maurice","hairdresser","plastic","heat","heatproof","heat-proof","fireproof","fire-proof","fire","flame","flames","flameproof","blowtorch","torch","egg","coating","coat","paint","spray","formula","recipe","secret","secrets","secrecy","patent","patents","patented","nasa","boeing","nuclear","shield","shields","shielding","insulation","insulate","insulating","wildfire","wildfires","smoke","toxic","fumes","polymer","polymers","material","materials","hartlepool","manchester","thermashield","reverse-engineer","reverse","engineering","kitchen","blender","ingredients","spacecraft","rocket","rockets","heatshield","aerospace","inventor","invention"]
+  starlite:["starlite","ward","maurice","hairdresser","plastic","heat","heatproof","heat-proof","fireproof","fire-proof","fire","flame","flames","flameproof","blowtorch","torch","egg","coating","coat","paint","spray","formula","recipe","secret","secrets","secrecy","patent","patents","patented","nasa","boeing","nuclear","shield","shields","shielding","insulation","insulate","insulating","wildfire","wildfires","smoke","toxic","fumes","polymer","polymers","material","materials","hartlepool","manchester","thermashield","reverse-engineer","reverse","engineering","kitchen","blender","ingredients","spacecraft","rocket","rockets","heatshield","aerospace","inventor","invention"],
+  concorde:["concorde","supersonic","sonic","boom","booms","thump","mach","jet","jets","plane","planes","aircraft","airplane","airplanes","flight","flights","fly","flying","flew","aviation","airline","airlines","speed","faster","sound","nasa","x-59","x59","quesst","lockheed","overture","atlantic","transatlantic","london","paris","york","fuel","noise","noisy","ban","banned","regulation","regulations","regulators","faa","passenger","passengers","ticket","tickets","crash","crashed","retired","retirement","british","airways","france","engine","engines","wing","wings","delta","smithsonian","museum","mph","airliner","travel","quiet","quieter","shockwave","shockwaves","pilot","pilots","runway","boeing","airbus"]
 };
 const EVIDENCE_MARKERS = ["according","mit","unesco","smithsonian","researcher","researchers","research","scientist","scientists","study","studies","yale","britannica","geographic","source","sources","article","found","discovered","confirmed","professor","university","dossier","report","reported"];
 const CONCESSION_MARKERS = ["but","however","although","though","while","yes","admit","admittedly","true","critics","granted","despite","even","slower","harder","costly","expensive","still","worth","trade-off","tradeoff","trade","downside","weakness","yet","sure"];
